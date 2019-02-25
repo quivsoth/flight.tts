@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>project hope</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
@@ -12,15 +11,31 @@
         crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
 </head>
-
 <body>
     <div class="container">
+        <h1><img class="logo" src="./aa_logo.png" alt="American Airlines" style="height:55px;margin-top:0.2em;margin-left:-0.3em"></h1>
         <br>
-        <div class="jumbotron">
-            <h1 class="display-4">Flights</h1>
-        </div>
-        <ul id="flights"></ul>
-
+        <h2>Flights into DFW</h2>
+        <!-- <ul id="flights">
+            <li class="header">Flight Number</li>
+            <li class="header">From</li>
+            <li class="header">Time</li>
+            <li class="header">Terminal/Gate</li>
+            <li class="header">Status</li>
+        </ul> -->
+        <table class="table table-striped" id="tblFlights">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Flight #</th>
+                    <th scope="col">From</th>
+                    <th scope="col">Arrival Time</th>
+                    <th scope="col">Terminal/Gate</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <script src="./index.js"></script>
 </body>
