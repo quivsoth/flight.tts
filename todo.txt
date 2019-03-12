@@ -1,3 +1,8 @@
-mongod --port 27017 --dbpath ./mdata-1 --smallfiles --replSet mongo-repl
-mongod --port 27018 --dbpath ./mdata-2 --smallfiles --replSet mongo-repl
-mongod --port 27019 --dbpath ./mdata-3 --smallfiles --replSet mongo-repl
+git log --name-only
+
+
+    //"googledevice" : "8f6abce9dc61a2c791d8c0a1be1c74c3"   //small one
+
+    //"googledevice" : "119e723b3e8a81d934a2e281cb80960c"   //big one
+
+    

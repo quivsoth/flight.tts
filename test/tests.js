@@ -6,6 +6,7 @@ chai.use(chaiHttp);
 var server = require('../server'); // Express App is here
 var config = require('../config');
 
+//console.clear();
 
 describe.only('Testing all Functionality to do with Flights', function () {
     // after(function() { console.log('after'); });
@@ -34,34 +35,37 @@ describe.only('Testing all Functionality to do with Flights', function () {
     });
 });
 
-
 describe.only('Google Home assistant Tests', function () {
     // after(function() { console.log('after'); });
     describe('Check the cast-web-api is running', function () {
         it('should return JSON message with cast-web-api version ', function () {
-            assert.equal(0, 0);
+            chai.request("http://192.168.1.2:3000/")
+                .get('/')
+                .end(function(err, res) {
+                    res.should.have.status(200);
+                    res.body.should.have.property('cast-web-api');
+                });
         });
-    });
+        it('should send a message to the goole home ', function () {
+            var message = "hello world.";
+            chai.request('http://192.168.1.2:3000/')
+            .post('/device/8f6abce9dc61a2c791d8c0a1be1c74c3/playMedia')
+            .send({'mediaTitle': message, 'mediaSubtitle': 'Flight Notification', 'googleTTS': 'en-US', 'mediaImageUrl': ''})
+            .end(function (err, res) {
+                res.should.have.status(200);
 
-    describe('Broadcast to a device ', function () {
-        it('should hear GH talk', function () {
-            assert.equal(0, 0);
+            });
         });
-
     });
 });
-
 
 describe.only('test config.js', function () {
     // after(function() { console.log('after'); });
     describe('Check if the config file has a db sring', function () {
         it('should return', function () {
             var config = require('../config.json');
-            console.log(config.username);
+            //console.log(config.username);
             assert.equal(0, 0);
         });
     });
 });
-
-
-

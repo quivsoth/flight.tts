@@ -1,5 +1,6 @@
 var http = require('http');
 var bodyParser = require('body-parser');
+var config = require('./config');
 
 module.exports = {
     Send: function (text, languageCode) {
@@ -9,13 +10,14 @@ module.exports = {
             googleTTS: languageCode,
             mediaImageUrl: "/"
         }) + "]";
+
         var h = require('http');
         var post_req = null,
             post_data = body;
         var post_options = {
-            hostname: '192.168.1.2',
-            port: '3000',
-            path: '/device/119e723b3e8a81d934a2e281cb80960c/playMedia',
+            hostname: config.casthostname,
+            port: config.castport,
+            path: '/device/' + config.googledevice + '/playMedia',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
