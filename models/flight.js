@@ -6,7 +6,7 @@ module.exports = function(app) {
   var io = app.get('socketio');
   var flightSchema = new mongoose.Schema({
     flightId: String,
-    flightNumber: String,
+    flightNumber: Number,
     departingAirport: String,
     departureTime: String,
     arrivalTime: String,
@@ -19,7 +19,7 @@ module.exports = function(app) {
 
   var flight = mongoose.model('Flight', flightSchema);
 
-  flight.watch().on('change', data =>
+  flight.watch(null, { fullDocument: "updateLookup" }).on('change', data =>
     io.emit('onDataChanged', data.fullDocument)
   );
   return flight;

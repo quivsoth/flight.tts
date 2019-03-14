@@ -1,10 +1,21 @@
 var socket = io();
 socket.on('onDataChanged', UpdateFlight);
 
+
+var hashtable = {};
+hashtable['A'] = 'Active';
+hashtable['C'] = 'Cancelled';
+hashtable['D'] = 'Diverted';
+hashtable['DN'] = 'Data Source Needed';
+hashtable['L'] = 'Not Operational';
+hashtable['R'] = 'Redirected';
+hashtable['S'] = 'Scheduled';
+hashtable['U'] = 'Unknown';
+
+
 getFlights();
 
 function UpdateFlight(data) {
-  console.log('data change detected' + data);
     var id = $('#' + data.flightId);
     id.empty();
     id.append("<td>" + data.flightNumber +
@@ -12,7 +23,7 @@ function UpdateFlight(data) {
         "</td><td>" + data.departureTime +
         "</td><td>" + data.arrivalTime +
         "</td><td>" + data.terminal + data.gate +
-        "</td><td>" + data.status + "</td>");
+        "</td><td>" + hashtable[data.status] + "</td>");
 }
 
 function BuildFlights(data) {
@@ -23,7 +34,7 @@ function BuildFlights(data) {
                                             item.departureTime +  "</td><td>" +
                                             item.arrivalTime +  "</td><td>" +
                                             item.terminal + item.gate + "</td><td>" +
-                                            item.status +
+                                            hashtable[item.status] +
                                 "</td></tr>");
     });
 }

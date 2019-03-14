@@ -49,7 +49,7 @@ describe.only('Google Home assistant Tests', function () {
         it('should send a message to the goole home ', function () {
             var message = "hello world.";
             chai.request('http://192.168.1.2:3000/')
-            .post('/device/8f6abce9dc61a2c791d8c0a1be1c74c3/playMedia')
+            .post('/device/119e723b3e8a81d934a2e281cb80960c/playMedia')
             .send({'mediaTitle': message, 'mediaSubtitle': 'Flight Notification', 'googleTTS': 'en-US', 'mediaImageUrl': ''})
             .end(function (err, res) {
                 res.should.have.status(200);

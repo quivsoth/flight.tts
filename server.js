@@ -5,7 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose'), Schema = mongoose.Schema;
-var flightListener = require('./flightListener.js')
+var flightListener = require('./flightListener.js');
 
 run().catch(error => console.error(error));
 
@@ -20,9 +20,12 @@ async function run() {
   } else if(args == "build") {
     flightListener.build();
     //process.exit();
+  } else if(args == "run") {
+    setInterval(flightListener.getActiveFlights, 6000, 'getActiveFlights');
+    //process.exit();
   }
 
-  setInterval(flightListener.getActiveFlights, 5000, 'getActiveFlights');
+
 
   app.use(express.static(__dirname));
   app.use(bodyParser.json());
@@ -47,6 +50,7 @@ async function run() {
   var server = http.listen(config.webserviceport, () => {
     console.log('Server running on port:', server.address().port);
   });
-  require('./dbListener.js');
+  // var dbListener = require('./dbListener.js');
+  // dbListener.run();
   module.exports = server;
 }

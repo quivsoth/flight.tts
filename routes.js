@@ -1,5 +1,6 @@
 var express = require('express');
 var flightRoute = require('./routes/flightRoute.js');
+var config = require('./config');
 
 // register route controllers
 module.exports = function(app) {

@@ -3,22 +3,39 @@ var request = require("request");
 var jsonQuery = require('json-query');
 var diff = require('deep-diff').diff;
 var broadcast = require("./broadcast.js");
+var config = require('./config');
 
 //------
 
 run().catch(error => console.error(error));
 
 async function run() {
-  //console.clear();
-  //console.log(new Date(), 'start');
-  const uri = 'mongodb://localhost:27017,localhost:27018,localhost:27019/techops?replicaSet=rs0';
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true });
-  const db = client.db('node-demo');
+  // console.clear();
+  console.log(new Date(), 'start');
+  const pipeline = [
+    {
+      $project: { documentKey: false }
+    }
+  ];
+  MongoClient.connect(config.database)
+    .then(client => {
+      console.log("Connected correctly to server");
+      // specify db and collections
+      const db = client.db("techops");
+      const collection = db.collection("flights");
+      const changeStream = collection.watch(pipeline, { fullDocument: 'updateLookup' });
 
-  // Create a change stream. The 'change' event gets emitted when there's a change in the database
-  db.collection('flights').watch().on('change', data => compareFlightChanges(data));
+      // start listen to changes
+      changeStream.on("change", function(data) {
+        //console.log("full document : " + data.fullDocument);
+        compareFlightChanges(data);
+        // compareFlightChanges();
+      });
+    })
+    .catch(err => {
+      console.error(err);
+  });
   refresh();
-
 
   function refresh() {
     var url = "http://localhost:3000/api/flights";
@@ -35,25 +52,39 @@ async function run() {
   }
 
   function compareFlightChanges(data) {
-    //var result = jsonQuery('[*_id=5c58c286e0ceb31c96458743]', {
+    // var result = jsonQuery('[*_id=5c58c286e0ceb31c96458743]', {
     var currentRecord = jsonQuery('[*_id=' + data.fullDocument._id + ']', {
       data: rs
     }).value;
     var differences = diff(currentRecord[0], data.fullDocument);
-
-    if (differences) {
-      //console.log(differences);
-      buildMessage(currentRecord[0], differences);
-    }
+    if (differences) buildMessage(currentRecord[0], differences);
     refresh();
   }
 
   function buildMessage(currentRecord, differences) {
+
+    var Enum = require('enum');
+    var status = new Enum({
+      'A': 'Active',
+      'C': 'Cancelled',
+      'D': 'Diverted',
+      'DN': 'Data Source Needed',
+      'L': 'Landed',
+      'NO': 'Not Operational',
+      'R': 'Redirected',
+      'S': 'Scheduled',
+      'U': 'Unknown'
+    });
+
     var message = 'Flight Notification for AA' + currentRecord.flightNumber + ': ';
     for (var i = 1; i < differences.length; i++) {
       switch (JSON.stringify(differences[i].path)) {
         case '["flightNumber"]':
-          message += 'Flight Number has changed from AA' + differences[i].lhs + ' to AA' + differences[i].rhs + '. ';
+          console.log("lhs : " + differences[i].lhs);
+          console.log("rhs : " + differences[i].rhs);
+          if (parseInt(differences[i].lhs != differences[i].rhs)) {
+            message += 'Flight Number has changed from AA' + differences[i].lhs + ' to AA' + differences[i].rhs + '. ';
+          }
           break;
         case '["from"]':
           message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) + 'Location changed from ' + differences[i].lhs + ' to ' + differences[i].rhs + '. ';
@@ -62,11 +93,11 @@ async function run() {
           message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) + 'Time has changed from ' + differences[i].lhs + ' to ' + differences[i].rhs + '. ';
           break;
         case '["status"]':
-          message += 'flight Status has changed to ' + differences[i].rhs + '. ';
+          message += 'flight Status has changed to ' + status.get(differences[i].rhs).value + '. ';
           break;
         case '["terminal"]':
           message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) +
-            'Termimnal has changed from ' + currentRecord.terminal + currentRecord.gate +
+            'Terminal has changed from ' + currentRecord.terminal + currentRecord.gate +
             ' to ' + differences[i].rhs + currentRecord.gate + '. ';
           break;
         case '["gate"]':
