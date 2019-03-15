@@ -7,34 +7,37 @@ var config = require('./config');
 
 //------
 
+console.clear();
 run().catch(error => console.error(error));
 
 async function run() {
   // console.clear();
   console.log(new Date(), 'start');
-  const pipeline = [
-    {
-      $project: { documentKey: false }
+  const pipeline = [{
+    $project: {
+      documentKey: false
     }
-  ];
+  }];
   MongoClient.connect(config.database)
     .then(client => {
-      console.log("Connected correctly to server");
+      //console.log("Connected correctly to server");
       // specify db and collections
       const db = client.db("techops");
       const collection = db.collection("flights");
-      const changeStream = collection.watch(pipeline, { fullDocument: 'updateLookup' });
+      const changeStream = collection.watch(pipeline, {
+        fullDocument: 'updateLookup'
+      });
 
       // start listen to changes
       changeStream.on("change", function(data) {
         //console.log("full document : " + data.fullDocument);
         compareFlightChanges(data);
-        // compareFlightChanges();
       });
     })
     .catch(err => {
       console.error(err);
-  });
+    });
+
   refresh();
 
   function refresh() {
@@ -57,12 +60,14 @@ async function run() {
       data: rs
     }).value;
     var differences = diff(currentRecord[0], data.fullDocument);
-    if (differences) buildMessage(currentRecord[0], differences);
+
+    // NOTE: Right hand side is the new value
+    if (differences) messageBuilder(currentRecord[0], differences);
     refresh();
   }
 
-  function buildMessage(currentRecord, differences) {
-
+  function messageBuilder(currentRecord, differences) {
+    // console.log(differences);
     var Enum = require('enum');
     var status = new Enum({
       'A': 'Active',
@@ -76,41 +81,47 @@ async function run() {
       'U': 'Unknown'
     });
 
-    var message = 'Flight Notification for AA' + currentRecord.flightNumber + ': ';
-    for (var i = 1; i < differences.length; i++) {
-      switch (JSON.stringify(differences[i].path)) {
-        case '["flightNumber"]':
-          console.log("lhs : " + differences[i].lhs);
-          console.log("rhs : " + differences[i].rhs);
-          if (parseInt(differences[i].lhs != differences[i].rhs)) {
-            message += 'Flight Number has changed from AA' + differences[i].lhs + ' to AA' + differences[i].rhs + '. ';
-          }
-          break;
-        case '["from"]':
-          message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) + 'Location changed from ' + differences[i].lhs + ' to ' + differences[i].rhs + '. ';
-          break;
-        case '["time"]':
-          message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) + 'Time has changed from ' + differences[i].lhs + ' to ' + differences[i].rhs + '. ';
-          break;
-        case '["status"]':
-          message += 'flight Status has changed to ' + status.get(differences[i].rhs).value + '. ';
-          break;
-        case '["terminal"]':
-          message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) +
-            'Terminal has changed from ' + currentRecord.terminal + currentRecord.gate +
-            ' to ' + differences[i].rhs + currentRecord.gate + '. ';
-          break;
-        case '["gate"]':
-          message += (i == 1 ? '' : (differences.length > 2 ? "Also, " : "")) +
-            'Gate has changed from ' + currentRecord.terminal + differences[i].lhs +
-            ' to ' + currentRecord.terminal + differences[i].rhs + '. ';
-          break;
-        default:
-          // code block
-      }
+    var messageBuilderCollection = [];
+    messageBuilderCollection.push('Flight Notification for AA' + currentRecord.flightNumber);
+
+    var flightNumber = differences.filter(function(DiffEdit) { return DiffEdit.path == "flightNumber"; });
+    if (parseInt(flightNumber[0].lhs) != parseInt(flightNumber[0].rhs)) messageBuilderCollection.push('Flight Number has changed from AA' + flightNumber[0].lhs + ' to AA' + flightNumber[0].rhs);
+
+    var departingAirport = differences.filter(function(DiffEdit) { return DiffEdit.path == "departingAirport";});
+    if (departingAirport.length > 0) messageBuilderCollection.push('Location changed from ' + departingAirport[0].lhs + ' to ' + departingAirport[0].rhs);
+
+    var departureTime = differences.filter(function(DiffEdit) { return DiffEdit.path == "departureTime"; });
+    if (departureTime.length > 0) messageBuilderCollection.push('Departure time has changed to ' + departureTime[0].rhs);
+
+    var arrivalTime = differences.filter(function(DiffEdit) { return DiffEdit.path == "arrivalTime"; });
+    if (arrivalTime.length > 0) messageBuilderCollection.push('Arrival time has changed to ' + arrivalTime[0].rhs);
+
+    var flight_Status = differences.filter(function(DiffEdit) { return DiffEdit.path == "status"; });
+    if (flight_Status.length > 0) messageBuilderCollection.push('Flight Status has changed to ' + status.get(flight_Status[0].rhs).value);
+
+    var terminal = differences.filter(function(DiffEdit) { return DiffEdit.path == "terminal"; });
+    var gate = differences.filter(function(DiffEdit) { return DiffEdit.path == "gate"; });
+
+    var termHasValue = (terminal.length > 0) ? true : false;
+    var gateHasValue = (gate.length > 0) ? true : false;
+    if (termHasValue && gateHasValue) {
+      messageBuilderCollection.push('Terminal has changed from ' + currentRecord.terminal + currentRecord.gate +
+        ' to ' + terminal[0].rhs + gate[0].rhs);
     }
-    //console.log(message);
-    var sender = broadcast.Send(message, "en-US");
-    return message;
+    else if (termHasValue && !gateHasValue) {
+      messageBuilderCollection.push('Terminal has changed from ' + currentRecord.terminal + currentRecord.gate +
+        ' to ' + terminal[0].rhs + currentRecord.gate);
+    }
+    else if (gateHasValue && !termHasValue) {
+      messageBuilderCollection.push('Gate has changed from ' + currentRecord.terminal + gate[0].lhs +
+        ' to ' + currentRecord.terminal + gate[0].rhs);
+    }
+
+    for (var i = 0; i < messageBuilderCollection.length; i++) { if(i >= 2) messageBuilderCollection[i] = "Also, " + messageBuilderCollection[i] + ". " }
+
+    //console.log(messageBuilderCollection);
+
+    var sender = broadcast.Send(messageBuilderCollection.toString(), "en-US");
+    return messageBuilderCollection.toString();
   }
 }

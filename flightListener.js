@@ -63,7 +63,6 @@ module.exports = {
             gate: (terminal === 'A' && airport === 'dfw') ? gate.substring(1) : gate
           }
         }
-
         MongoClient.connect(config.database, function(err, db) {
           if (err) throw err;
           var dbo = db.db("techops");
@@ -81,7 +80,6 @@ module.exports = {
 
   drop: async function() {
     console.log('Dropping data..');
-
     MongoClient.connect(config.database, function(err, db) {
       if (err) throw err;
       var dbo = db.db("techops");
@@ -134,10 +132,7 @@ module.exports = {
           console.log('From live site status: ' + body.flightStatus.status + "\n\n");
           console.log('Local Record : ' + flight.flightNumber);
           console.log('Local Status : ' + flight.status);
-
           module.exports.update(body);
-
-
         }
       } else {
         console.log(error);

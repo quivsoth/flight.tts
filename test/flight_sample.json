@@ -1,0 +1,221 @@
+{
+    "request": {
+        "flightId": {
+            "requested": "992822725",
+            "interpreted": 992822725
+        },
+        "extendedOptions": {},
+        "url": "https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/status/992822725"
+    },
+    "appendix": {
+        "airlines": [
+            {
+                "fs": "JJ",
+                "iata": "JJ",
+                "icao": "TAM",
+                "name": "LATAM Airlines Brasil",
+                "phoneNumber": "1-888-2FLY TAM",
+                "active": true
+            },
+            {
+                "fs": "AA",
+                "iata": "AA",
+                "icao": "AAL",
+                "name": "American Airlines",
+                "phoneNumber": "08457-567-567",
+                "active": true
+            },
+            {
+                "fs": "LA",
+                "iata": "LA",
+                "icao": "LAN",
+                "name": "LATAM Airlines",
+                "phoneNumber": "1 (305) 670 9999",
+                "active": true
+            }
+        ],
+        "airports": [
+            {
+                "fs": "MIA",
+                "iata": "MIA",
+                "icao": "KMIA",
+                "faa": "MIA",
+                "name": "Miami International Airport",
+                "street1": "4200 N.W. 21 Street",
+                "street2": "",
+                "city": "Miami",
+                "cityCode": "MIA",
+                "stateCode": "FL",
+                "postalCode": "33122",
+                "countryCode": "US",
+                "countryName": "United States",
+                "regionName": "North America",
+                "timeZoneRegionName": "America/New_York",
+                "weatherZone": "FLZ074",
+                "localTime": "2019-03-14T08:50:30.573",
+                "utcOffsetHours": -4,
+                "latitude": 25.796,
+                "longitude": -80.278234,
+                "elevationFeet": 8,
+                "classification": 1,
+                "active": true,
+                "delayIndexUrl": "https://api.flightstats.com/flex/delayindex/rest/v1/json/airports/MIA?codeType=fs",
+                "weatherUrl": "https://api.flightstats.com/flex/weather/rest/v1/json/all/MIA?codeType=fs"
+            },
+            {
+                "fs": "DFW",
+                "iata": "DFW",
+                "icao": "KDFW",
+                "faa": "DFW",
+                "name": "Dallas/Fort Worth International Airport",
+                "street1": "International Pkwy",
+                "city": "Dallas",
+                "cityCode": "DFW",
+                "stateCode": "TX",
+                "postalCode": "75261",
+                "countryCode": "US",
+                "countryName": "United States",
+                "regionName": "North America",
+                "timeZoneRegionName": "America/Chicago",
+                "weatherZone": "TXZ119",
+                "localTime": "2019-03-14T07:50:30.573",
+                "utcOffsetHours": -5,
+                "latitude": 32.897462,
+                "longitude": -97.036128,
+                "elevationFeet": 603,
+                "classification": 1,
+                "active": true,
+                "delayIndexUrl": "https://api.flightstats.com/flex/delayindex/rest/v1/json/airports/DFW?codeType=fs",
+                "weatherUrl": "https://api.flightstats.com/flex/weather/rest/v1/json/all/DFW?codeType=fs"
+            }
+        ],
+        "equipments": [
+            {
+                "iata": "757",
+                "name": "Boeing 757 Passenger",
+                "turboProp": false,
+                "jet": true,
+                "widebody": false,
+                "regional": false
+            }
+        ]
+    },
+    "flightStatus": {
+        "flightId": 992822725,
+        "carrierFsCode": "AA",
+        "flightNumber": "1219",
+        "departureAirportFsCode": "MIA",
+        "arrivalAirportFsCode": "DFW",
+        "departureDate": {
+            "dateLocal": "2019-03-13T21:35:00.000",
+            "dateUtc": "2019-03-14T01:35:00.000Z"
+        },
+        "arrivalDate": {
+            "dateLocal": "2019-03-13T23:54:00.000",
+            "dateUtc": "2019-03-14T04:54:00.000Z"
+        },
+        "status": "L",
+        "schedule": {
+            "flightType": "J",
+            "serviceClasses": "RJY",
+            "restrictions": ""
+        },
+        "operationalTimes": {
+            "publishedDeparture": {
+                "dateLocal": "2019-03-13T21:35:00.000",
+                "dateUtc": "2019-03-14T01:35:00.000Z"
+            },
+            "publishedArrival": {
+                "dateLocal": "2019-03-13T23:54:00.000",
+                "dateUtc": "2019-03-14T04:54:00.000Z"
+            },
+            "scheduledGateDeparture": {
+                "dateLocal": "2019-03-13T21:35:00.000",
+                "dateUtc": "2019-03-14T01:35:00.000Z"
+            },
+            "estimatedGateDeparture": {
+                "dateLocal": "2019-03-13T22:56:00.000",
+                "dateUtc": "2019-03-14T02:56:00.000Z"
+            },
+            "actualGateDeparture": {
+                "dateLocal": "2019-03-13T22:56:00.000",
+                "dateUtc": "2019-03-14T02:56:00.000Z"
+            },
+            "flightPlanPlannedDeparture": {
+                "dateLocal": "2019-03-13T21:54:00.000",
+                "dateUtc": "2019-03-14T01:54:00.000Z"
+            },
+            "estimatedRunwayDeparture": {
+                "dateLocal": "2019-03-13T23:15:00.000",
+                "dateUtc": "2019-03-14T03:15:00.000Z"
+            },
+            "actualRunwayDeparture": {
+                "dateLocal": "2019-03-13T23:15:00.000",
+                "dateUtc": "2019-03-14T03:15:00.000Z"
+            },
+            "scheduledGateArrival": {
+                "dateLocal": "2019-03-13T23:54:00.000",
+                "dateUtc": "2019-03-14T04:54:00.000Z"
+            },
+            "estimatedGateArrival": {
+                "dateLocal": "2019-03-14T01:02:00.000",
+                "dateUtc": "2019-03-14T06:02:00.000Z"
+            },
+            "actualGateArrival": {
+                "dateLocal": "2019-03-14T01:02:00.000",
+                "dateUtc": "2019-03-14T06:02:00.000Z"
+            },
+            "flightPlanPlannedArrival": {
+                "dateLocal": "2019-03-13T23:47:00.000",
+                "dateUtc": "2019-03-14T04:47:00.000Z"
+            },
+            "estimatedRunwayArrival": {
+                "dateLocal": "2019-03-14T00:52:00.000",
+                "dateUtc": "2019-03-14T05:52:00.000Z"
+            },
+            "actualRunwayArrival": {
+                "dateLocal": "2019-03-14T00:52:00.000",
+                "dateUtc": "2019-03-14T05:52:00.000Z"
+            }
+        },
+        "codeshares": [
+            {
+                "fsCode": "JJ",
+                "flightNumber": "2122",
+                "relationship": "L"
+            },
+            {
+                "fsCode": "LA",
+                "flightNumber": "6642",
+                "relationship": "L"
+            }
+        ],
+        "delays": {
+            "departureGateDelayMinutes": 81,
+            "departureRunwayDelayMinutes": 81,
+            "arrivalGateDelayMinutes": 68,
+            "arrivalRunwayDelayMinutes": 65
+        },
+        "flightDurations": {
+            "scheduledBlockMinutes": 199,
+            "blockMinutes": 186,
+            "scheduledAirMinutes": 173,
+            "airMinutes": 157,
+            "scheduledTaxiOutMinutes": 19,
+            "taxiOutMinutes": 19,
+            "scheduledTaxiInMinutes": 7,
+            "taxiInMinutes": 10
+        },
+        "airportResources": {
+            "departureTerminal": "C",
+            "departureGate": "E8",
+            "arrivalTerminal": "C",
+            "arrivalGate": "29",
+            "baggage": "C26"
+        },
+        "flightEquipment": {
+            "scheduledEquipmentIataCode": "757",
+            "tailNumber": "N176AA"
+        }
+    }
+}
