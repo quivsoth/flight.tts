@@ -1,6 +1,6 @@
 var assert = require('assert');
 var config = require('../config');
-var flightListener = require('../flightListener.js');
+var flightListener = require('../listeners/flightListener.js');
 
 var MongoClient = require('mongodb').MongoClient;
 

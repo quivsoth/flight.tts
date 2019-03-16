@@ -5,7 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose'), Schema = mongoose.Schema;
-var flightListener = require('./flightListener.js');
+var flightListener = require('./listeners/flightListener.js');
 
 run().catch(error => console.error(error));
 
@@ -25,8 +25,6 @@ async function run() {
     //process.exit();
   }
 
-
-
   app.use(express.static(__dirname));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
@@ -44,7 +42,7 @@ async function run() {
   require('./routes')(app, io);
 
   // io.on('connection', () => {
-  //   // console.log("User connected.");
+  //   // console.log("Connected.");
   // });
 
   var server = http.listen(config.webserviceport, () => {
