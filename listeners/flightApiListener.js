@@ -22,6 +22,7 @@ module.exports = {
 
     var maxFlights = '500';
     var url = `https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/status/${airport}/arr/${year}/${month}/${day}/${hour}?appId=${appId}&appKey=${appKey}&utc=false&numHours=6&carrier=AA&maxFlights=${maxFlights}`;
+
     console.log(url);
     request({
       url: url,
@@ -94,7 +95,6 @@ module.exports = {
       };
       dbo.collection("flights").find(query).toArray(function(err, result) {
         if (err) throw err;
-        //console.log(result);
         for (var i = 0; i < result.length; i++) {
           //console.log(result[i]);
           module.exports.checkFlightStatus(result[i]);

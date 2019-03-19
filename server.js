@@ -5,31 +5,29 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose'), Schema = mongoose.Schema;
-var flightListener = require('./listeners/flightListener.js');
+//var flightListenerApi = require('./listeners/flightApiListener.js');
 
 run().catch(error => console.error(error));
 
 async function run() {
-  console.clear();
+//  console.clear();
   console.log(new Date(), 'Started Flight API Server');
   var args = process.argv.slice(2);
   if (args == "drop") {
     console.log('trying to drop');
-    flightListener.drop();
+    flightListenerApi.drop();
     //process.exit();
   } else if(args == "build") {
-    flightListener.build();
+    flightListenerApi.build();
     //process.exit();
   } else if(args == "run") {
-    setInterval(flightListener.getActiveFlights, 6000, 'getActiveFlights');
+    setInterval(flightListenerApi.getActiveFlights, 6000, 'getActiveFlights');
     //process.exit();
   }
 
   app.use(express.static(__dirname));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: false
-  }));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.set('socketio', io);
 
   // Configuration
@@ -41,14 +39,16 @@ async function run() {
   // Routes
   require('./routes')(app, io);
 
-  // io.on('connection', () => {
-  //   // console.log("Connected.");
-  // });
-
   var server = http.listen(config.webserviceport, () => {
     console.log('Server running on port:', server.address().port);
   });
-  // var dbListener = require('./dbListener.js');
-  // dbListener.run();
+
+  // Flight listeners for Google Home
+  require('./listeners/flightListener.js');
+
   module.exports = server;
 }
+
+// io.on('connection', () => {
+//   // console.log("Connected.");
+// });

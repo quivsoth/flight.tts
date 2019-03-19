@@ -28,7 +28,6 @@ async function run() {
       const changeStream = collection.watch(pipeline, {
         fullDocument: 'updateLookup'
       });
-
       // start listen to changes
       changeStream.on("change", function(data) {
         //console.log("full document : " + data.fullDocument);
@@ -62,8 +61,12 @@ async function run() {
     }).value;
     var differences = diff(currentRecord[0], data.fullDocument);
 
+    console.log(currentRecord[0]);
+    console.log(data.fullDocument);
+
     // NOTE: Right hand side is the new value
     if (differences) messageBuilder(currentRecord[0], differences);
+
     refresh();
   }
 
@@ -120,8 +123,8 @@ async function run() {
     }
 
     for (var i = 0; i < messageBuilderCollection.length; i++) { if(i >= 2) messageBuilderCollection[i] = "and, " + messageBuilderCollection[i] + ", " }
-
-    //console.log(messageBuilderCollection);
+    //
+    console.log(messageBuilderCollection);
 
     var sender = broadcast.Send(messageBuilderCollection.toString(), "en-US");
     return messageBuilderCollection.toString();
