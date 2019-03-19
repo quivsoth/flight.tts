@@ -13,14 +13,11 @@ All 3 interfact with each other to create a solution that will alert the user of
 1. A google home device or google.tts (i use a google home)
 1. forever.js or supervisor.js used to keep server alive
 
-
-
 ## Tested with
 * Mongo 4.0.6
 * Node Version 10.9
 * Mocha 6.0.2
 * Google Chrome
-
 
 ## Installation
 1. Run 3 Replication sets of MongoDB
