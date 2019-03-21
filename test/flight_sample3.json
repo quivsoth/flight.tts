@@ -108,10 +108,10 @@
       "dateUtc": "2019-03-18T23:41:00.000Z"
     },
     "arrivalDate": {
-      "dateLocal": "2019-03-18T19:34:00.000",
+      "dateLocal": "2019-03-18T19:39:00.000",
       "dateUtc": "2019-03-19T00:34:00.000Z"
     },
-    "status": "S",
+    "status": "L",
     "schedule": {
       "flightType": "J",
       "serviceClasses": "Y",

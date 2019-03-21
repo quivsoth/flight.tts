@@ -5,7 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose'), Schema = mongoose.Schema;
-//var flightListenerApi = require('./listeners/flightApiListener.js');
+var flightListenerApi = require('./listeners/flightApiListener.js');
 
 run().catch(error => console.error(error));
 
