@@ -41,9 +41,6 @@ client.query({
     }
 
     console.log('FLIGHTS DATA BUILT');
-    //$.each(data, function (index, item) {
-    //    $("#tblFlights").append("<tr id=" + item.flightId + "><td>" );
-    //});
 }
 
 /*
