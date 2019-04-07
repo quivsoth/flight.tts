@@ -1,17 +1,53 @@
+const cache = new apolloboost.InMemoryCache();
+const link = new apolloboost.HttpLink({uri: 'https://gql-flighthub.azurewebsites.net/api/http-entry'});
+const client = new apolloboost.ApolloClient({cache, link});
+const gql = apolloboost.gql;
+const mom = moment;
+
+
+console.log('QUERY http-entry for flight stats data');
+
+client.query({
+    query: gql
+    `{
+        getFlightsArrivingToday{
+            flightId,
+            flightNumber,
+            departureAirportFsCode,
+            departureDate{dateLocal},
+            arrivalDate{dateLocal},
+            airportResources{
+                arrivalTerminal,
+                arrivalGate
+            }
+            status
+       }
+    }`
+  }).then(result => BuildFlights(result)).catch(error => console.error(error));
+
+  function BuildFlights(data) {
+    console.log('BUILD FLIGHTS DATA');
+
+    var dataArray = data.data.getFlightsArrivingToday;
+
+    for(var i = 0; i < dataArray.length; i++)
+    {
+        $("#tblFlights").append("<tr id=" + dataArray[i].flightId + "><td>" +
+        dataArray[i].flightNumber + "</td><td>" +
+        dataArray[i].departureAirportFsCode + "</td><td>" +
+        mom(dataArray[i].departureDate.dateLocal).format("hh:mm a") + "</td><td>" +
+        mom(dataArray[i].arrivalDate.dateLocal).format("hh:mm a") + "</td><td>"  + "TERMINAL GATE" + "</td><td>" +
+        dataArray[i].status + "</td></tr>");
+    }
+
+    console.log('FLIGHTS DATA BUILT');
+}
+
+/*
+//this asks for data from the server to build out the data table
+
 var socket = io();
 socket.on('onDataChanged', UpdateFlight);
-
-
-var hashtable = {};
-hashtable['A'] = 'Active';
-hashtable['C'] = 'Cancelled';
-hashtable['D'] = 'Diverted';
-hashtable['DN'] = 'Data Source Needed';
-hashtable['L'] = 'Landed';
-hashtable['R'] = 'Redirected';
-hashtable['S'] = 'Scheduled';
-hashtable['U'] = 'Unknown';
-
 
 getFlights();
 
@@ -44,3 +80,4 @@ function getFlights() {
         BuildFlights(data);
     })
 }
+*/
