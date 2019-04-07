@@ -33,7 +33,7 @@ async function run() {
                                                                                     //registering middleware
   app.use(express.static(__dirname));                                               //use express static content app handler, index.html is a static file
 
-  /*
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.set('socketio', io);
@@ -47,16 +47,15 @@ async function run() {
   // Routes
   require('./routes')(app, io);
 
-  
+
   // Flight listeners for Google Home
   require('./listeners/flightListener.js');
-  
-  */
+
                                                                                                   //start server on port 8080
  var server = http.listen(8080, () => {
    console.log('Server running on port:', server.address().port);
  });
- 
+
   module.exports = server;
 
 }

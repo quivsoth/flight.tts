@@ -16,18 +16,18 @@ client.query({
             departureAirportFsCode,
             departureDate{dateLocal},
             arrivalDate{dateLocal},
-            flightAirportResources{
+            airportResources{
                 arrivalTerminal,
                 arrivalGate
             }
             status
-       } 
+       }
     }`
   }).then(result => BuildFlights(result)).catch(error => console.error(error));
 
   function BuildFlights(data) {
     console.log('BUILD FLIGHTS DATA');
-    
+
     var dataArray = data.data.getFlightsArrivingToday;
 
     for(var i = 0; i < dataArray.length; i++)
@@ -35,7 +35,7 @@ client.query({
         $("#tblFlights").append("<tr id=" + dataArray[i].flightId + "><td>" +
         dataArray[i].flightNumber + "</td><td>" +
         dataArray[i].departureAirportFsCode + "</td><td>" +
-        mom(dataArray[i].departureDate.dateLocal).format("hh:mm a") + "</td><td>" +  
+        mom(dataArray[i].departureDate.dateLocal).format("hh:mm a") + "</td><td>" +
         mom(dataArray[i].arrivalDate.dateLocal).format("hh:mm a") + "</td><td>"  + "TERMINAL GATE" + "</td><td>" +
         dataArray[i].status + "</td></tr>");
     }
